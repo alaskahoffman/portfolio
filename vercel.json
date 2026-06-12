@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "functions": {
+    "api/index.go": {
+      "maxDuration": 10
+    }
+  },
+  "routes": [
+    {
+      "src": "/$",
+      "dest": "/api/index.go"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.go"
+    }
+  ]
+}
