@@ -71,10 +71,44 @@ const baseTemplate = `
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Title}}</title>
     <style>
+        html {
+            background: linear-gradient(168deg, #ccd5db 0%, #dde3e7 30%, #eef1f3 60%, #f8f9fa 100%) no-repeat fixed;
+            background-size: 220% 220%;
+            animation: sheen 75s ease-in-out infinite alternate;
+        }
+        @keyframes sheen {
+            0%   { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        @view-transition {
+            navigation: auto;
+        }
+        .container {
+            view-transition-name: page;
+        }
+        .sidebar {
+            view-transition-name: sidebar;
+        }
+        ::view-transition-old(page) {
+            animation: page-out 280ms ease-in both;
+        }
+        ::view-transition-new(page) {
+            animation: page-in 380ms 90ms ease-out both;
+        }
+        @keyframes page-out {
+            to { opacity: 0; transform: scale(0.9); }
+        }
+        @keyframes page-in {
+            from { opacity: 0; transform: scale(0.9); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { animation: none; }
+            ::view-transition-old(page),
+            ::view-transition-new(page) { animation: none; }
+        }
         body {
             font-family: Helvetica, Arial, sans-serif;
             font-size: 11px;
-            background-color: white;
             margin: 0;
             padding: 0;
         }
@@ -86,7 +120,7 @@ const baseTemplate = `
             width: 150px;
             padding: 20px;
             background-color: transparent;
-            border-right: 1px solid #ccc;
+            border-right: 1px solid #b4c0c8;
         }
           .main-content {
               flex: 1;
@@ -199,6 +233,10 @@ const baseTemplate = `
             text-indent: 2em;
         }
     </style>
+    <script>
+        // Phase the background drift off the wall clock so it carries across page loads
+        document.documentElement.style.animationDelay = -(Date.now() / 1000 % 150) + 's';
+    </script>
 </head>
 <body>
     <div class="mobile-menu-toggle">
