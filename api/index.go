@@ -43,15 +43,12 @@ const sidebarTemplate = `
         <div><a href="/portaltext">portaltext (2026)</a></div>
         <div><a href="/andstar">andstar (2026)</a></div>
         <br>
+        <div class="nav-label">Past</div>
+        <div><a href="/dxrg">DX Research Group (2024&ndash;2026)</a></div>
+        <br>
         <div class="nav-label">Writing</div>
         <div><a href="/poetry">Poetry</a></div>
         <div><a href="/boma">Boma (2025)</a></div>
-        <br>
-        <div class="nav-label">Past</div>
-        <s><div><a href="/search?q=">Capsule 21 (2022)</a></div></s>
-        <s><div><a href="/search?q=">Superchief Gallery (2023)</a></div></s>
-        <s><div><a href="/search?q=">COEX, Korea (2023)</a></div></s>
-        <div><a href="/dxrg">DX Research Group (2024&ndash;2026)</a></div>
         <br>
         <br>
         <br>
@@ -59,6 +56,7 @@ const sidebarTemplate = `
         <br>
         <div><a href="/">About</a></div>
         <div><a href="https://x.com/145k4">@145k4</a></div>
+        <div><a href="https://github.com/alaskahoffman">github.com/alaskahoffman</a></div>
 		<div>hello@alaskahoffman.com</div>
     </nav>
 </div>`
@@ -203,6 +201,11 @@ const baseTemplate = `
           .poem-listing {
               margin-bottom: 2px;
           }
+          .poem-nav {
+              display: flex;
+              justify-content: space-between;
+              margin-top: 26px;
+          }
         input[type="text"] {
             width: 70px;
             height: 8px;
@@ -296,6 +299,16 @@ func loadPoems() []Poem {
 		poems = append(poems, poem)
 	}
 	return poems
+}
+
+// poemExists reports whether a poem with the given ID exists in the archive.
+func poemExists(id int) bool {
+	f, err := staticFiles.Open(fmt.Sprintf("public/poems/poem-%d.json", id))
+	if err != nil {
+		return false
+	}
+	f.Close()
+	return true
 }
 
 // formatBomaContent - formats story content with paragraph tags for proper indentation
@@ -410,13 +423,13 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	content := `
         <div class="bio">
             <p>Alaska Hoffman is a Michigander poet and product builder based in Brooklyn, New York.</p>
-            <p>She designs and builds software concerned with reading, language, and interface. She is the creator of <a href="/portaltext">portaltext</a> (2026), a browser extension that summarizes links in place, and <a href="/andstar">andstar</a> (2026), an engine for dialogue games with dice mechanics. She is the author of the essay <a href="https://hcra.substack.com/p/ai-has-a-ux-problem">&ldquo;AI Has a UX Problem&rdquo;</a> (2026).</p>
+            <p>She designs and builds software concerned with reading, language, and interface. She is the creator of <a href="/portaltext">portaltext</a> (2026), a consumer AI browser extension that expands upon hypertext, and <a href="/andstar">andstar</a> (2026), a plaintext engine and publication platform for interactive fiction.</p>
             <p>From 2024 to 2026 she was a product designer at <a href="/dxrg">DX Research Group</a>, and is a co-author of <a href="https://arxiv.org/abs/2604.26091">&ldquo;Operating-Layer Controls for Onchain Language-Model Agents Under Real Capital&rdquo;</a> (arXiv, 2026).</p>
             <p>Her writing is interested in themes of noise, futurism, permanence, hauntology, transition, repetition, and historicity.</p>
             <p>She has a B.A. in Creative Writing from Columbia University, and is a USMC veteran.</p>
-            <p>This website serves as an archive of her personal work. Alaska has also created under the names dovetail, ennen, and Archway Labs.</p>
             <br>
             <p><a href="https://x.com/145k4">@145k4</a></p>
+            <p><a href="https://github.com/alaskahoffman">github.com/alaskahoffman</a></p>
             <p>hello@alaskahoffman.com</p>
         </div>`
 
@@ -484,17 +497,30 @@ func poemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	prev := ""
+	if poemExists(poem.ID - 1) {
+		prev = fmt.Sprintf(`<a href="/poem/%d">&larr; last poem</a>`, poem.ID-1)
+	}
+	next := ""
+	if poemExists(poem.ID + 1) {
+		next = fmt.Sprintf(`<a href="/poem/%d">next poem &rarr;</a>`, poem.ID+1)
+	}
+
 	content := fmt.Sprintf(`
         <h4>%s</h4>
-        
+
         <div class="poem-content">
             %s
         </div>
         <br>
         <br>
-        <p>%s // %s</p>`,
+        <p>%s // %s</p>
+        <div class="poem-nav">
+            <span>%s</span>
+            <span>%s</span>
+        </div>`,
 		poem.Title, strings.ReplaceAll(poem.Content, "\n", "<br>"),
-		poem.Location, poem.Date)
+		poem.Location, poem.Date, prev, next)
 
 	render(w, fmt.Sprintf("%s - Alaska Hoffman", poem.Title), content, "")
 }
@@ -548,12 +574,13 @@ func portaltextHandler(w http.ResponseWriter, r *http.Request) {
         <img class="project-img project-img-borderless" src="/static/images/portaltextwide.svg" alt="portaltext — a cat peeking through a green portal" style="max-width: 280px;">
 
         <div class="poem-content">
-            <p>portaltext is a browser extension that produces short, context-aware summaries of links, images, and PDFs on hover. It reads both the current page and the linked destination, so a reader can follow a reference without leaving the page.</p>
+            <p>portaltext is a free and open-source, AI browser extension that produces short, context-aware summaries of links, images, and PDFs on hover. It reads both the current page and the linked destination, so a reader can follow a reference without leaving the page.</p>
             <p>A solo project, designed and built by Alaska Hoffman. Released June 2026.</p>
             <img class="project-img" src="/static/images/portaltext-hover.png" alt="portaltext hover summaries nesting across a Borges article">
         </div>
         <br>
-        <p><a href="https://portaltext.com">portaltext.com</a></p>`
+        <p><a href="https://portaltext.com">portaltext.com</a></p>
+        <p><a href="https://github.com/alaskahoffman/portaltext">github.com/alaskahoffman/portaltext</a></p>`
 
 	render(w, "portaltext - Alaska Hoffman", content, "")
 }
@@ -567,13 +594,14 @@ func andstarHandler(w http.ResponseWriter, r *http.Request) {
         <img class="project-img project-img-borderless" src="/static/images/andstar-wordmark.svg" alt="andstar" style="max-width: 280px;">
 
         <div class="poem-content">
-            <p>andstar is a browser-based engine for Disco Elysium-style dialogue games with tabletop mechanics. Stories are written in plain text; the engine adds skill checks, dice rolls, items, currency, and branching endings. Finished games are shared as links, playable directly on <a href="https://andstar.org">andstar.org</a> on desktop and mobile.</p>
+            <p>andstar is a free and open-source, browser-based engine for Disco Elysium-style dialogue games with tabletop mechanics. Stories are written in plain text; the engine adds skill checks, dice rolls, items, currency, and branching endings. Finished games are shared as links, playable directly on <a href="https://andstar.org">andstar.org</a> on desktop and mobile.</p>
             <p>A solo project, designed and built by Alaska Hoffman. Released June 2026.</p>
             <img class="project-img" src="/static/images/andstar-play.png" alt="an andstar game mid-play: skill checks, dice rolls, inventory, and a skill-point allocation panel">
             <img src="/static/images/andstar-glyph.svg" alt="&amp;*" style="width: 24px; height: auto; display: block; margin-top: 13px;">
         </div>
         <br>
-        <p><a href="https://andstar.org">andstar.org</a></p>`
+        <p><a href="https://andstar.org">andstar.org</a></p>
+        <p><a href="https://github.com/alaskahoffman/andstar">github.com/alaskahoffman/andstar</a></p>`
 
 	render(w, "andstar - Alaska Hoffman", content, "")
 }
