@@ -42,6 +42,7 @@ const sidebarTemplate = `
         <div class="nav-label">Projects</div>
         <div><a href="/portaltext">portaltext (2026)</a></div>
         <div><a href="/andstar">andstar (2026)</a></div>
+        <div><a href="/squire">ARcH Squire (2026)</a></div>
         <br>
         <div class="nav-label">Past</div>
         <div><a href="/dxrg">DX Research Group (2024&ndash;2026)</a></div>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POEM·MATIC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/squire/app.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/squire/vendor/three/build/three.module.js",
+      "three/addons/": "/squire/vendor/three/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- WebGL scene (the device body) renders here; CSS3D layer above it -->
+  <div id="webgl"></div>
+  <div id="css3d"></div>
+
+  <!-- the front face of the handheld: adopted into the 3D scene by scene.js.
+       1000×1320 layout px == 100×132 world units (scale 0.1) -->
+  <div class="face booting" id="device">
+
+    <!-- the display glass -->
+    <div class="crt" id="crt">
+      <div class="screen" aria-hidden="true"></div>
+      <textarea id="poem" class="poem" spellcheck="false" autocomplete="off"></textarea>
+      <canvas class="lcd" id="lcd" aria-hidden="true"></canvas>
+      <div class="gutter" id="gutter"></div>
+    </div>
+
+    <!-- the maker's mark is a lit decal in scene.js (archsquire-01.png);
+         there is NO guidance input — the knobs and the poem are the interface -->
+
+    <!-- printed legends for the 3D controls (meshes live in scene.js) -->
+    <span class="klabel backlit" style="left:770px; top:1095px">METER</span>
+    <span class="klabel backlit" style="left:930px; top:1095px">RHYME</span>
+    <span class="klabel backlit" style="left:770px; top:1275px">TERSE</span>
+    <span class="klabel backlit" style="left:930px; top:1275px">LENGTH</span>
+    <span class="klabel backlit" style="left:110px; top:1050px">UNDO</span>
+    <span class="klabel backlit" style="left:270px; top:1050px">COPY</span>
+    <span class="klabel backlit" style="left:430px; top:1050px">CLR</span>
+    <span class="klabel rlabel backlit" style="left:590px; top:1050px">WRITE</span>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- maker's credit, fixed to the browser window (not the device) -->
+  <div class="credit">made by Alaska Hoffman | <a href="https://x.com/145k4" target="_blank" rel="noopener">@145k4</a> | <a href="https://alaskahoffman.com" target="_blank" rel="noopener">alaskahoffman.com</a></div>
+
+  <script src="/squire/app.js"></script>
+  <script type="module" src="/squire/scene.js"></script>
+</body>
+</html>
