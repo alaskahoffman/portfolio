@@ -143,7 +143,7 @@ device.add(backSlab);
 }
 
 const glassPlane = new THREE.Mesh(new THREE.PlaneGeometry(87, 71), MAT.glass);
-glassPlane.position.set(0, 24, 14.2);
+glassPlane.position.set(0, 24.5, 14.2); // centered in the bezel cavity (y −10…59)
 device.add(glassPlane);
 
 // the LCD canvas as an emissive surface — this is what blooms and "lights the room"
@@ -153,7 +153,7 @@ lcdTex.minFilter = THREE.LinearFilter;
 lcdTex.magFilter = THREE.LinearFilter;
 const lcdMat = new THREE.MeshBasicMaterial({ map: lcdTex, transparent: true });
 const lcdPlane = new THREE.Mesh(new THREE.PlaneGeometry(84, 68), lcdMat);
-lcdPlane.position.set(0, 24, 14.3); // DOM face rides at 14.35, pixel-registered
+lcdPlane.position.set(0, 24.5, 14.3); // DOM face rides at 14.35, pixel-registered
 device.add(lcdPlane);
 
 // ---- maker's mark: ARcH Squire, silkscreened on the fascia ------------------------

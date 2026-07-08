@@ -59,8 +59,8 @@ html, body {
 /* ---------- the display glass (px box registered to the 3D screen) ---------- */
 .crt {
   position: absolute;
-  left: 80px; top: 80px;
-  width: 840px; height: 680px; /* glass runs y 58…−10 in world units */
+  left: 80px; top: 75px; /* centered in the bezel cavity (world y −9.5…58.5) */
+  width: 840px; height: 680px;
   padding: 20px 24px 70px 78px;
 }
 /* no fake glass wash — the only light on the glass is its own lit cells */
@@ -94,13 +94,8 @@ html, body {
   background: transparent;
   color: transparent;
   caret-color: transparent;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(77,184,255,.25) transparent;
+  overflow: hidden; /* the glass holds exactly 19 lines — never scrolls */
 }
-.poem::-webkit-scrollbar { width: 6px; }
-.poem::-webkit-scrollbar-track { background: transparent; }
-.poem::-webkit-scrollbar-thumb { background: rgba(77,184,255,.22); border-radius: 3px; }
 .poem::selection { background: transparent; color: transparent; }
 .poem::placeholder { color: transparent; }
 

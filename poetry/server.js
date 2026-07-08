@@ -97,27 +97,28 @@ function rhymeInstruction(level) {
 }
 
 function tersenessInstruction(level) {
-  if (level < 20) return "Lush and flowing — rich imagery and subordinate clauses welcome.";
-  if (level < 50) return "Balanced diction — neither sparse nor ornate.";
-  if (level < 80) return "Spare. Trim adjectives; lean on strong nouns and verbs.";
-  return "Severe economy. Few words, each one load-bearing. No filler.";
-}
-
-function lineLengthInstruction(level) {
-  if (level < 20) return "Very short lines, about 2–4 words each.";
-  if (level < 45) return "Short lines, about 4–7 words each.";
-  if (level < 70) return "Medium lines, about 7–10 words each.";
-  if (level < 90) return "Long lines, about 10–14 words each.";
-  return "Sprawling lines, 14+ words allowed.";
+  // The TERSE dial alone controls diction AND line length: 0.00 → long flowing
+  // sentences with conjunctions, ~7–8 words/line; 1.00 → bare 1–2 word fragments,
+  // no conjunctions. (There is no separate line-length knob anymore.)
+  if (level < 20) return "Long, flowing complete sentences with full grammar — commas, conjunctions (and, or, but), subordinate clauses that run on and enjamb across lines. Lines run long: about 7–8 words each.";
+  if (level < 45) return "Mostly complete sentences with connective tissue — commas and the odd conjunction — pared of excess. Lines of about 5–7 words each.";
+  if (level < 70) return "Spare. Short clauses, sparing conjunctions, strong nouns and verbs. Lines of about 4–5 words each.";
+  if (level < 90) return "Terse. Clipped fragments, most articles and conjunctions dropped. Lines of about 2–3 words each.";
+  return "Extreme economy: bare fragments of just 1–2 words per line. NO conjunctions (never 'and', 'or', 'but'), no complete sentences, no connective grammar — single images or words stacked one per line.";
 }
 
 function poemLengthInstruction(level) {
-  if (level < 25) return "A brief poem: roughly 4–8 lines, one or two stanzas.";
-  if (level < 60) return "A modest poem: roughly 10–16 lines in a few stanzas.";
-  return "An extended poem: roughly 18–28 lines across several stanzas.";
+  // The LENGTH dial maps 0.00 → a 1–2 line poem, 1.00 → the 19-line ceiling.
+  // The screen holds exactly 19 lines, so a poem may never exceed that. The
+  // budget below is a TOTAL that counts blank lines between stanzas — models
+  // tend to forget those, so it is stated in the harshest possible terms.
+  const n = Math.max(1, Math.min(19, Math.round(1 + (level / 100) * 18)));
+  if (n <= 2) return "Length: 1–2 lines TOTAL — a single image or utterance. Never write more than 2 lines.";
+  const lo = Math.max(2, n - 3);
+  return `Length: aim for about ${lo}–${n} lines. ABSOLUTE HARD LIMIT: your entire poem must be ${n} lines or fewer — and never more than 19 lines under any circumstances. Count EVERY line toward this total, INCLUDING the blank line between each stanza. So a poem of four 4-line stanzas is 4+1+4+1+4+1+4 = 19 lines, already at the ceiling. When unsure, write fewer lines and fewer stanzas.`;
 }
 
-function styleBlock({ theme, vibe, meter, rhyme, terseness, lineLength }, composing = false) {
+function styleBlock({ theme, vibe, meter, rhyme, terseness }, composing = false) {
   const parts = [];
   parts.push(theme && theme.trim()
     ? `Subject: ${theme.trim()}.`
@@ -130,7 +131,6 @@ function styleBlock({ theme, vibe, meter, rhyme, terseness, lineLength }, compos
   parts.push(`Meter: ${meterInstruction(meter)}`);
   parts.push(`Rhyme: ${rhymeInstruction(rhyme)}`);
   parts.push(`Diction: ${tersenessInstruction(terseness)}`);
-  parts.push(`Line length: ${lineLengthInstruction(lineLength)}`);
   return parts.join("\n");
 }
 
@@ -300,7 +300,7 @@ app.post("/squire/api/poem", async (req, res) => {
   if (!API_KEY) return res.status(500).json({ error: "No OPENROUTER_API_KEY set. Copy .env.example to .env and add your key." });
   const {
     theme = "", vibe = [], temperature = 0.9,
-    meter = 30, rhyme = 30, terseness = 40, lineLength = 40, poemLength = 40,
+    meter = 30, rhyme = 30, terseness = 40, poemLength = 40,
   } = req.body || {};
 
   if (MODEL_CAPS === null) await loadModelCaps();

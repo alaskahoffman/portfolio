@@ -44,6 +44,65 @@ function keySnd(name) {
   a.play().catch(() => { /* pre-interaction autoplay block — stay silent */ });
 }
 
+// recorded cues: the power-on chime and the "glass is full" reject
+const startSnd = new Audio("/squire/start.wav");
+startSnd.volume = 0.8;
+let startPlayed = false;
+function playStart() {
+  if (startPlayed) return;
+  startPlayed = true;
+  startSnd.currentTime = 0;
+  // browsers may block audio before a gesture — if so the chime just stays silent
+  startSnd.play().catch(() => {});
+}
+const errSnd = new Audio("/squire/error.wav");
+errSnd.volume = 0.7;
+function playError() {
+  errSnd.currentTime = 0;
+  errSnd.play().catch(() => { /* stay silent */ });
+}
+
+// the glass holds exactly 19 lines — the poem is capped there and never scrolls.
+// Models often overshoot LENGTH, so the cap truncates on a STANZA boundary
+// (never mid-thought) when it has to trim.
+const MAX_LINES = 19;
+function capLines(s) {
+  const ls = s.replace(/\s+$/, "").split("\n");
+  if (ls.length <= MAX_LINES) return ls.join("\n");
+  const kept = ls.slice(0, MAX_LINES);
+  // if the first dropped line is blank, the cut already fell on a stanza break
+  if (!ls[MAX_LINES] || !ls[MAX_LINES].trim()) return kept.join("\n").replace(/\s+$/, "");
+  // otherwise we split a stanza — walk back to the last blank and drop the tail
+  let i = kept.length - 1;
+  while (i >= 0 && kept[i].trim()) i--;
+  if (i > 0) return kept.slice(0, i).join("\n").replace(/\s+$/, "");
+  return kept.join("\n"); // a single stanza already overfills the glass — hard cut
+}
+const PLACEHOLDER = "Write your poem here, brave knight. Or, if you wish, summon me with the RED button below.";
+
+// boot splash: the maker's mark, phosphor-tinted, shown on the glass at power-on.
+// Same dark-art→lit-ink conversion scene.js uses for the fascia decal.
+let splashCanvas = null, showSplash = false;
+{
+  const img = new Image();
+  img.onload = () => {
+    const cv = document.createElement("canvas");
+    cv.width = img.width; cv.height = img.height;
+    const x = cv.getContext("2d");
+    x.drawImage(img, 0, 0);
+    const d = x.getImageData(0, 0, cv.width, cv.height);
+    for (let i = 0; i < d.data.length; i += 4) {
+      const lum = (d.data[i] + d.data[i + 1] + d.data[i + 2]) / 3;
+      d.data[i + 3] = (d.data[i + 3] * (255 - lum)) / 255; // dark ink → lit
+      d.data[i] = 159; d.data[i + 1] = 220; d.data[i + 2] = 255; // phosphor #9fdcff
+    }
+    x.putImageData(d, 0, 0);
+    splashCanvas = cv;
+    if (typeof booting !== "undefined" && booting) renderLCD();
+  };
+  img.src = "/squire/archsquire-01.png";
+}
+
 // ---- the machine's voice: synthesized, no samples --------------------------------
 // tape-motor loop while a job runs: rotation hum with wow, bearing noise,
 // and a fluttering spindle whine
@@ -166,12 +225,12 @@ const numLab = (v) => (v / 100).toFixed(2);
 // The knobs are 3D meshes (scene.js) — this is only their state. scene.js
 // calls PM.knobSet on drag/wheel and reads k.value each frame to rotate the
 // mesh. Values are announced on the readout (like volume on a real deck).
-// (The LINE dial was retired: lineLength is pinned to its old default.)
+// (Line length is no longer its own knob — the TERSE dial sets it.)
 const KNOBS = [
   { id: "meter",   label: "METER",  min: 0, max: 100, step: 1, value: 50, def: 50, fmt: numLab },
-  { id: "rhyme",   label: "RHYME",  min: 0, max: 100, step: 1, value: 0,  def: 0,  fmt: numLab },
+  { id: "rhyme",   label: "RHYME",  min: 0, max: 100, step: 1, value: 50, def: 50, fmt: numLab },
   { id: "terse",   label: "TERSE",  min: 0, max: 100, step: 1, value: 50, def: 50, fmt: numLab },
-  { id: "poemLen", label: "LENGTH", min: 0, max: 100, step: 1, value: 0,  def: 0,  fmt: numLab },
+  { id: "poemLen", label: "LENGTH", min: 0, max: 100, step: 1, value: 50, def: 50, fmt: numLab },
 ];
 
 // the status line is DRAWN on the matrix (bottom row of the glass), not DOM
@@ -205,7 +264,6 @@ function knobs() {
     meter: knobVal("meter"),
     rhyme: knobVal("rhyme"),
     terseness: knobVal("terse"),
-    lineLength: 40,
     poemLength: knobVal("poemLen"),
   };
 }
@@ -447,9 +505,23 @@ function renderLCD() {
   };
 
   if (booting) {
-    // dark glass: nothing but the status line below
+    // power-on: the maker's mark on dark glass, else nothing but the status line
+    if (showSplash && splashCanvas) {
+      const iw = splashCanvas.width, ih = splashCanvas.height;
+      const s = Math.min((tw * 0.6) / iw, (th * 0.6) / ih);
+      const dw = iw * s, dh = ih * s;
+      const dx = ox + (tw - dw) / 2, dy = oy + (th - dh) / 2;
+      c.drawImage(splashCanvas, dx, dy, dw, dh);
+      c.globalCompositeOperation = "lighter"; // its own soft phosphor bloom
+      c.globalAlpha = 0.3; c.filter = "blur(6px)";
+      c.drawImage(splashCanvas, dx, dy, dw, dh);
+      c.filter = "none"; c.globalAlpha = 1; c.globalCompositeOperation = "source-over";
+    }
   } else if (!ta.value) {
-    // empty page: just the blinking cell — that's the whole invitation
+    // empty page: a dim invitation across the top, with the blinking cell
+    wrapLine(PLACEHOLDER, maxCols).forEach((row, ri) => {
+      drawRow(row.text, -1e9, oy + ri * ROWPX, true);
+    });
     if (blinkOn && !busy) {
       c.fillStyle = LIT;
       for (let col = 0; col < 5; col++) cell(ox + col * CELL, oy + 8 * CELL);
@@ -679,7 +751,23 @@ function updateAction() {
 document.addEventListener("selectionchange", () => {
   if (document.activeElement === ta) { updateAction(); renderLCD(); }
 });
-ta.addEventListener("input", () => buildGutter());
+// keep the poem within the 19-line glass — typing, pasting, everything
+ta.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && ta.selectionStart === ta.selectionEnd && lines().length >= MAX_LINES) {
+    e.preventDefault(); // a caret-Enter here would open a 20th line
+    playError();
+  }
+});
+ta.addEventListener("input", () => {
+  if (lines().length > MAX_LINES) { // paste or IME overflow — trim and reject
+    const pos = ta.selectionStart;
+    ta.value = capLines(ta.value);
+    const p = Math.min(pos, ta.value.length);
+    ta.setSelectionRange(p, p);
+    playError();
+  }
+  buildGutter();
+});
 addEventListener("resize", () => buildGutter());
 
 // ---- toast --------------------------------------------------------------------------
@@ -771,7 +859,7 @@ async function compose() {
   try {
     const data = await post("/api/poem", { ...knobs(), theme: inputVal() });
     if (ta.value.trim()) pushUndo();
-    ta.value = data.poem;
+    ta.value = capLines(data.poem);
     ta.scrollTop = 0;
     buildGutter();
   } catch (e) {
@@ -784,6 +872,7 @@ async function compose() {
 async function continuePoem() {
   const ls = lines();
   if (!ls.some((l) => l.trim())) { toast("Type a line first."); return; }
+  if (ls.length >= MAX_LINES) { playError(); return; }
   setBusy(true, "continuing");
   try {
     const data = await post("/api/continue", {
@@ -794,11 +883,10 @@ async function continuePoem() {
     });
     pushUndo();
     const opening = ta.value.replace(/\s+$/, "");
-    ta.value = opening + "\n" + data.text;
+    ta.value = capLines(opening + "\n" + data.text);
     buildGutter();
     ta.focus();
-    ta.setSelectionRange(opening.length + 1, ta.value.length);
-    ta.scrollTop = ta.scrollHeight;
+    ta.setSelectionRange(Math.min(opening.length + 1, ta.value.length), ta.value.length);
     updateAction();
   } catch (e) {
     toast("⚠ " + e.message);
@@ -824,7 +912,7 @@ async function rewrite(scope, start, end) {
     chainRecord(data.text);
     const replacement = data.text.split("\n");
     const next = [...ls.slice(0, start), ...replacement, ...ls.slice(end + 1)];
-    ta.value = next.join("\n");
+    ta.value = capLines(next.join("\n"));
     buildGutter();
     const before = next.slice(0, start).join("\n");
     const pos = start === 0 ? 0 : before.length + 1;
@@ -854,7 +942,7 @@ async function rewriteSel(sel) {
     });
     pushUndo();
     chainRecord(data.text);
-    ta.value = ta.value.slice(0, sel.s) + data.text + ta.value.slice(sel.e);
+    ta.value = capLines(ta.value.slice(0, sel.s) + data.text + ta.value.slice(sel.e));
     buildGutter();
     ta.focus();
     ta.setSelectionRange(sel.s, sel.s + data.text.length);
@@ -895,15 +983,19 @@ function doClear() {
 
 // ---- boot: phosphor warm-up -------------------------------------------------------------------
 async function boot() {
+  playStart(); // power-on chime (autoplay-gated; re-armed on first gesture)
   await sleep(420);
   setReadout("POWER");
   clickSnd(46, 0.5, 0.09, "sine");
   await sleep(520);
-  setReadout("PHOSPHOR WARM-UP");
+  setReadout("ARcH SQUIRE");
+  showSplash = true;
   device.classList.remove("booting");
   device.classList.add("warming");
   clickSnd(120, 0.14, 0.045, "triangle");
-  await sleep(1100);
+  renderLCD();
+  await sleep(1700); // let the maker's mark sit a beat
+  showSplash = false;
   device.classList.remove("warming");
   booting = false;
   updateAction();
