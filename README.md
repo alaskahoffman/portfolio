@@ -8,7 +8,7 @@ work. The index displays only linked titles, using the same list layout as Poetr
 project pages show a title, a one- or two-sentence description, and images with
 optional captions.
 
-Edit `api/software.json` to update the catalog. Set `SidebarOnly` for projects already featured in the sidebar to omit them from
+Edit `api/_software.json` to update the catalog. Set `SidebarOnly` for projects already featured in the sidebar to omit them from
 the Experiments list while retaining their detail pages. Each group has an `ID`, `Name`,
 and `Projects`. A project supplies its `Slug`, `Name`, `Status`, `Summary`,
 `Medium`, `Paragraphs`, `State`, `Screenshot`, `Caption`, and optional `Links`
@@ -17,6 +17,9 @@ optional captions identify previews, archived results, or image context when nee
 Optional `AdditionalScreenshots` entries supply a `URL` and `Caption` for
 further views, using the same image treatment as the primary screenshot.
 Text is escaped by Go's HTML templates; write plain text, not HTML.
+Keep the catalog underscore-prefixed so Vercel does not treat it as an API route.
+The portfolio handlers live in `api/index.go`, the sole function entrypoint;
+`.vercelignore` excludes Go test files from deployment.
 Descriptions use the site's third-person, museum-label style in one or two sentences
 total, matching the portaltext and andstar pages: identify the work, explain its
 distinctive interaction, and make its purpose concrete. Include attribution or

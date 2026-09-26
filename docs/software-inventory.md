@@ -7,7 +7,7 @@ folder timestamps. Existing portaltext and andstar release labels come from the
 portfolio's established case studies. Prototype labels indicate an implemented
 project without an established public release in this review.
 
-The portfolio catalog is `api/software.json`. The Experiments index (`/software`) uses Poetry’s
+The portfolio catalog is `api/_software.json`. The Experiments index (`/software`) uses Poetry’s
 title-only list layout, preserving the catalog order without visible category
 headings or summaries. The sidebar section is labeled Software, with an Experiments link. portaltext,
 andstar, ARcH Squire, and DX Research Group remain in the sidebar and are omitted from the

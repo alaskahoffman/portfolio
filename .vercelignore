@@ -1,0 +1,2 @@
+# Go tests are checked locally and are not Vercel function entrypoints.
+api/*_test.go
