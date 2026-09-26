@@ -39,7 +39,8 @@ const sidebarTemplate = `
     </form>
     
     <nav>
-        <div class="nav-label">Projects</div>
+        <div class="nav-label">Software</div>
+        <div><a href="/software">Experiments</a></div>
         <div><a href="/portaltext">portaltext (2026)</a></div>
         <div><a href="/andstar">andstar (2026)</a></div>
         <div><a href="/squire">ARcH Squire (2026)</a></div>
@@ -65,7 +66,7 @@ const sidebarTemplate = `
 // Base template - main page layout with CSS styling
 const baseTemplate = `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Title}}</title>
@@ -425,6 +426,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
         <div class="bio">
             <p>Alaska Hoffman is a Michigander poet and product builder based in Brooklyn, New York.</p>
             <p>She designs and builds software concerned with reading, language, and interface. She is the creator of <a href="/portaltext">portaltext</a> (2026), a consumer AI browser extension that expands upon hypertext, and <a href="/andstar">andstar</a> (2026), a plaintext engine and publication platform for interactive fiction.</p>
+            <p>Her <a href="/software">software and experiments</a> also span desktop research tools, generative worlds, games, and AI interfaces, from released projects to works in progress.</p>
             <p>From 2024 to 2026 she was a product designer at <a href="/dxrg">DX Research Group</a>, and is a co-author of <a href="https://arxiv.org/abs/2604.26091">&ldquo;Operating-Layer Controls for Onchain Language-Model Agents Under Real Capital&rdquo;</a> (arXiv, 2026).</p>
             <p>Her writing is interested in themes of noise, futurism, permanence, hauntology, transition, repetition, and historicity.</p>
             <p>She has a B.A. in Creative Writing from Columbia University, and is a USMC veteran.</p>
@@ -692,6 +694,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		homeHandler(w, r)
 	case r.URL.Path == "/search":
 		searchHandler(w, r)
+	case r.URL.Path == "/software":
+		softwareHandler(w, r)
+	case strings.HasPrefix(r.URL.Path, "/software/"):
+		softwareProjectHandler(w, r)
 	case strings.HasPrefix(r.URL.Path, "/poem/"):
 		poemHandler(w, r)
 	case r.URL.Path == "/poetry":
@@ -708,4 +714,3 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	}
 }
-

@@ -1,0 +1,269 @@
+[
+  {
+    "ID": "reading",
+    "Name": "Reading and language",
+    "Projects": [
+      {
+        "Slug": "portaltext",
+        "Name": "portaltext",
+        "Status": "released",
+        "Summary": "A browser extension that produces context-aware summaries of links, images, and PDFs on hover.",
+        "Paragraphs": [],
+        "State": "",
+        "Links": [],
+        "Page": "/portaltext",
+        "Medium": "browser extension",
+        "Screenshot": "/static/images/portaltext-hover.png",
+        "Caption": "Nested summaries in the browser extension.",
+        "SidebarOnly": true
+      },
+      {
+        "Slug": "puller",
+        "Name": "Puller",
+        "Status": "in development",
+        "Summary": "An experiment in making AI knowledge legible through its relation to public online sources.",
+        "Paragraphs": [
+          "Puller investigates the legibility of AI vector space by mapping model-generated associations onto publicly available online sources. Its research boards place latent relations in contact with citations, making the passage from machine knowledge to documentary evidence available for inspection."
+        ],
+        "State": "A project by Alaska Hoffman. Early desktop builds; in development.",
+        "Links": [],
+        "Page": "",
+        "Medium": "desktop application",
+        "Screenshot": "/static/images/software/puller.png?v=ae29437d26",
+        "Caption": "Demonstration board with fictional entities and sources."
+      },
+      {
+        "Slug": "portaltext-desktop",
+        "Name": "portaltext (Desktop)",
+        "Status": "prototype",
+        "Summary": "A macOS companion that extends portaltext to text selected in other applications.",
+        "Paragraphs": [
+          "portaltext (Desktop) is a macOS application that brings portaltext’s AI summaries to text selected in other software. References open in nested floating panels, so a reader can follow them without switching away from the application they are using."
+        ],
+        "State": "A prototype by Alaska Hoffman. Local macOS builds.",
+        "Links": [],
+        "Page": "",
+        "Medium": "desktop application",
+        "Screenshot": "/static/images/software/portaltext-desktop.png?v=b52cf87ab4",
+        "Caption": "Reading-panel preview with illustrative text."
+      },
+      {
+        "Slug": "transcluded-bible",
+        "Name": "The Transcluded Bible",
+        "Status": "experiment",
+        "Summary": "An experiment in nonlinear textual analysis and writing as a multidimensional technology.",
+        "Paragraphs": [
+          "The Transcluded Bible is an experiment in nonlinear textual analysis, composing scriptural passages and interpretive relations into traversable catenae. It approaches writing as a multidimensional technology whose meaning emerges across spatial, referential, and sequential arrangements."
+        ],
+        "State": "A reading experiment by Alaska Hoffman. Local prototype; in development.",
+        "Links": [],
+        "Page": "",
+        "Medium": "reading interface",
+        "Screenshot": "/static/images/software/transcluded-bible.png?v=db6d02593e",
+        "Caption": "John 1:1 and Genesis 1:1, with saved connection analysis."
+      },
+      {
+        "Slug": "pdf2tei",
+        "Name": "pdf2tei",
+        "Status": "prototype",
+        "Summary": "A contribution to computational philology through transcription, textual structure, and page-linked evidence.",
+        "Paragraphs": [
+          "pdf2tei is a contribution to computational philology, converting scanned texts into structured text while retaining their relation to the material page. It treats transcription, textual structure, and the document’s spatial evidence as interdependent objects of interpretation."
+        ],
+        "State": "A prototype by Alaska Hoffman. The resulting transcription and structural markup remain subject to editorial review.",
+        "Links": [],
+        "Page": "",
+        "Medium": "document conversion software",
+        "Screenshot": "/static/images/software/pdf2tei.png?v=e320fc8b3c",
+        "Caption": "The Orestean Trilogy: saved transcription awaiting editorial review."
+      },
+      {
+        "Slug": "squire",
+        "Name": "ARcH Squire",
+        "Status": "prototype",
+        "Summary": "A poetry-writing instrument presented as a three-dimensional handheld device.",
+        "Paragraphs": [
+          "ARcH Squire is a browser-based poetry instrument presented as a handheld machine, with knobs for meter, rhyme, terseness, and length. A single button composes, continues, or rewrites the selected passage while retaining the surrounding poem."
+        ],
+        "State": "A project by Alaska Hoffman. The prototype, also titled POEM·MATIC, remains in development.",
+        "Links": [],
+        "Page": "",
+        "Medium": "poetry interface",
+        "Screenshot": "/static/images/software/squire.png?v=9d8f0118a7",
+        "Caption": "An excerpt from Alaska Hoffman’s “the necessities” (2025).",
+        "SidebarOnly": true
+      },
+      {
+        "Slug": "itsnow",
+        "Name": "itsnow",
+        "Status": "prototype",
+        "Summary": "An exploration of an agent-first internet through machine-addressed accounts of the present.",
+        "Paragraphs": [
+          "itsnow explores an agent-first internet through the production of machine-addressed accounts of the present. It reorganizes news and prediction-market signals as context for autonomous interpretation and action."
+        ],
+        "State": "A software project by Alaska Hoffman. Prototype; in development.",
+        "Links": [],
+        "Page": "",
+        "Medium": "briefing service",
+        "Screenshot": "/static/images/software/itsnow.png?v=7b21aec511",
+        "Caption": "Saved news snapshot."
+      }
+    ]
+  },
+  {
+    "ID": "worlds",
+    "Name": "Games and simulation",
+    "Projects": [
+      {
+        "Slug": "andstar",
+        "Name": "andstar",
+        "Status": "released",
+        "Summary": "A plaintext engine and publication platform for branching dialogue games.",
+        "Paragraphs": [],
+        "State": "",
+        "Links": [],
+        "Page": "/andstar",
+        "Medium": "interactive fiction engine",
+        "Screenshot": "/static/images/andstar-play.png",
+        "Caption": "A dialogue game in the andstar player.",
+        "SidebarOnly": true
+      },
+      {
+        "Slug": "miranda",
+        "Name": "The Miranda Project",
+        "Status": "prototype",
+        "Summary": "An exploration of AI worldbuilding, simulation, and simulacrum in dialogue with Baudrillard and Borges.",
+        "Paragraphs": [
+          "The Miranda Project explores AI worldbuilding through a self-generating territory that cyclically deepens its places before expanding outward. Its map and textual archive treat simulation and simulacrum as compositional principles, in dialogue with Baudrillard and Borges."
+        ],
+        "State": "A project by Alaska Hoffman. Working prototype; in development.",
+        "Links": [],
+        "Page": "",
+        "Medium": "generative world engine",
+        "Screenshot": "/static/images/software/miranda.png?v=874babc267",
+        "Caption": "Miranda Hook: streets, buildings, and Hook Harbour."
+      },
+      {
+        "Slug": "mud-dle",
+        "Name": "mud·dle",
+        "Status": "prototype",
+        "Summary": "An aleatoric writing experiment combining authored fragments with repetitive AI prose.",
+        "Paragraphs": [
+          "mud·dle is an experiment in aleatoric fiction, interleaving an extensive corpus of Alaska Hoffman’s writing with the repetition and low-temperature variation of AI prose. Its idle-game form stages an encounter between authored particularity, combinatorial abundance, and computational recurrence."
+        ],
+        "State": "A game by Alaska Hoffman. Playable prototype; in development.",
+        "Links": [],
+        "Page": "",
+        "Medium": "browser game",
+        "Screenshot": "/static/images/software/mud-dle.png?v=f9b9915c0d",
+        "Caption": ""
+      },
+      {
+        "Slug": "flyblood",
+        "Name": "FLYBLOOD",
+        "Status": "in development",
+        "Summary": "A gamified connectome experiment interrogating the distinction between simulation and living organism.",
+        "Paragraphs": [
+          "FLYBLOOD situates fruit-fly connectomes within a gamified environment of care and extermination. The experiment interrogates the ontological distinction between simulated organism and “real” lifeform."
+        ],
+        "State": "A game by Alaska Hoffman. A local macOS development build follows the earlier web prototype.",
+        "Links": [],
+        "Page": "",
+        "Medium": "desktop game",
+        "Screenshot": "/static/images/software/flyblood.png?v=a8ce58b40e",
+        "Caption": "Native Godot development build."
+      },
+      {
+        "Slug": "corner-office",
+        "Name": "Corner Office",
+        "Status": "prototype",
+        "Summary": "An experiment relating early AI video generation to the technical constraints and expressive possibilities of 1990s FMV games.",
+        "Paragraphs": [
+          "Corner Office uses the short duration of early generative video as a compositional constraint, bringing 2020s AI into dialogue with 1990s full-motion-video games. Reusing the period’s video and audio codecs, it examines the shared strengths and limitations of two emerging media through a point-and-click office scene."
+        ],
+        "State": "An interactive scene by Alaska Hoffman. Prototype.",
+        "Links": [],
+        "Page": "",
+        "Medium": "interactive scene",
+        "Screenshot": "/static/images/software/corner-office.png?v=5e98cb89d1",
+        "Caption": "Local preview built from the project’s artwork.",
+        "AdditionalScreenshots": [
+          {
+            "URL": "/static/images/software/corner-office-phone.png?v=4cf6d48733",
+            "Caption": "The telephone view."
+          }
+        ]
+      },
+      {
+        "Slug": "meleefolio",
+        "Name": "Meleefolio",
+        "Status": "experiment",
+        "Summary": "An experiment in decompilation, historical code, and software reuse through Melee’s trophy gallery.",
+        "Paragraphs": [
+          "Meleefolio repurposes Super Smash Bros. Melee’s trophy gallery as a setting for Alaska Hoffman’s design work. It investigates a future of abundant decompiled software through the reuse and recycling of historical code."
+        ],
+        "State": "A portfolio experiment by Alaska Hoffman. Local playable build in Dolphin.",
+        "Links": [],
+        "Page": "",
+        "Medium": "game modification",
+        "Screenshot": "/static/images/software/meleefolio.png?v=fb7a5c5653",
+        "Caption": "Built on the doldecomp Melee project; shown in Dolphin."
+      }
+    ]
+  },
+  {
+    "ID": "team",
+    "Name": "DX Research Group and related work",
+    "Projects": [
+      {
+        "Slug": "dxrg",
+        "Name": "DX Research Group",
+        "Status": "2024–2026",
+        "Summary": "Product design for autonomous trading agents, including persona systems and typed user controls.",
+        "Paragraphs": [],
+        "State": "",
+        "Links": [],
+        "Page": "/dxrg",
+        "Medium": "product design",
+        "Screenshot": "/static/images/dxrg-paper.png",
+        "Caption": "Title and abstract of the DX Research Group paper.",
+        "SidebarOnly": true
+      },
+      {
+        "Slug": "ceo-bench",
+        "Name": "CEO Bench",
+        "Status": "prototype",
+        "Summary": "A dashboard presenting the activity and performance of Terminal Markets trading agents.",
+        "Paragraphs": [
+          "CEO Bench is a spectator interface for a DX Research Group benchmark in which language models manage teams of trading agents. Performance histories, scorecards, and agent messages let a viewer follow how the teams allocate capital and respond to the market."
+        ],
+        "State": "A related interface project within Alaska Hoffman’s work on trading-agent systems. Prototype.",
+        "Links": [],
+        "Page": "",
+        "Medium": "data interface",
+        "Screenshot": "/static/images/software/ceo-bench.png?v=f298d81b2d",
+        "Caption": "Illustrative placeholder data; not benchmark results."
+      },
+      {
+        "Slug": "terminal-village",
+        "Name": "Terminal Village",
+        "Status": "live",
+        "Summary": "A live viewer of 35,000+ unique DX Terminal NFT sprites, sorted and highlighted by market availability.",
+        "Paragraphs": [
+          "Terminal Village is a live website for viewing the DX Terminal NFT collection, presenting more than 35,000 unique sprites sorted and highlighted according to market availability. The interface renders the collection as both a population of characters and a field of exchange."
+        ],
+        "State": "A live collection viewer within Alaska Hoffman’s work on DX Terminal.",
+        "Links": [
+          {
+            "Label": "village.terminal.markets",
+            "URL": "https://village.terminal.markets/"
+          }
+        ],
+        "Page": "",
+        "Medium": "character interface",
+        "Screenshot": "/static/images/software/terminal-village.png?v=a0bc6f4c4f",
+        "Caption": "Shopping view, with market availability highlighted."
+      }
+    ]
+  }
+]
